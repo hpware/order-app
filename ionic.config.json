@@ -1,0 +1,8 @@
+{
+  "name": "Order App",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite",
+  "id": "1fec158d"
+}
