@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-import { ref } from 'vue';
-import cookie from 'vue-cookies';
-const login_user = ref(cookie.get('login'));
-</script>
 
+import {IonContent, IonHeader, IonPage, IonTitle, IonToolbar} from "@ionic/vue";
+</script>
 <template>
   <ion-page>
     <ion-header>
@@ -18,12 +15,8 @@ const login_user = ref(cookie.get('login'));
           <ion-title size="large">首頁</ion-title>
         </ion-toolbar>
       </ion-header>
-      <div v-if="login_user">
+      <div>
         <p>首頁</p>
-      </div>
-      <div v-else>
-        <p>請先登入</p>
-        <a href="/app/login">登入</a>
       </div>
     </ion-content>
   </ion-page>

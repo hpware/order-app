@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
-import TabsPage from '@/Tabs.vue'
+import TabsPage from '@/Tabs.vue';
+import login from '@/pages/LoginPage.vue';
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -31,11 +32,16 @@ const routes: Array<RouteRecordRaw> = [
                 path: '剩餘',
                 component: () => import('@/pages/MoneyLeft.vue')
             },
+            {
+                path: '充值',
+                component: () => import('@/pages/RechargePage.vue')
+            }
+
         ]
     },
     {
         path: '/:pathMatch(.*)*',
-        component: () => import('@/pages/NotFound.vue')
+        redirect: '/app/404'
     }
 ]
 
