@@ -3,6 +3,11 @@ import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue
 import { ref } from 'vue';
 import cookie from 'vue-cookies';
 const login_user = ref(cookie.get('login'));
+if (!cookie.get('login')) {
+  setTimeout(() => {
+    window.location.href = '/app/login';
+  }, 500);
+}
 </script>
 
 <template>
@@ -22,8 +27,6 @@ const login_user = ref(cookie.get('login'));
         <p>首頁</p>
       </div>
       <div v-else>
-        <p>請先登入</p>
-        <a href="/app/login">登入</a>
       </div>
     </ion-content>
   </ion-page>

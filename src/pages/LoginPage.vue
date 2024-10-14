@@ -4,7 +4,7 @@ import { ref } from 'vue';
 async function loginsubmit() {
   alert('登入成功');
   cookie.set('login', 'true');
-};
+}
 if (cookie.get('login') === 'true') {
   window.location.href = '/app/home';
 }

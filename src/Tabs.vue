@@ -2,11 +2,11 @@
 import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage, IonRouterOutlet } from '@ionic/vue';
 import { ellipse, square, triangle, home } from 'ionicons/icons';
 import cookie from 'vue-cookies';
+const login_user = cookie.get('login');
 function logout() {
-  if (!confirm('確定要登出嗎?')) {
-    return;
+  if (cookie.get('login')) {
+    alert('登出成功');
   }
-  alert('登出成功');
   cookie.remove('login');
   window.location.href = '/app/login';
 };
@@ -21,8 +21,7 @@ function logout() {
           <ion-icon aria-hidden="true" :icon="home" />
           <ion-label>Tab 1</ion-label>
         </ion-tab-button>
-
-        <ion-tab-button tab="tab2" href="/tabs/tab2">
+        <ion-tab-button tab="" href="/tabs/tab2">
           <ion-icon aria-hidden="true" :icon="ellipse" />
           <ion-label>Tab 2</ion-label>
         </ion-tab-button>
