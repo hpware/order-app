@@ -1,0 +1,47 @@
+import { createRouter, createWebHistory } from '@ionic/vue-router';
+import { RouteRecordRaw } from 'vue-router';
+import TabsPage from '@/Tabs.vue'
+
+const routes: Array<RouteRecordRaw> = [
+    {
+        path: '/',
+        redirect: '/app/login'
+    },
+    {
+        path: '/app/',
+        component: TabsPage,
+        children: [
+            {
+                path: '',
+                redirect: '/app/login'
+            },
+            {
+                path: 'login',
+                component: () => import('@/pages/LoginPage.vue')
+            },
+            {
+                path: 'home',
+                component: () => import('@/pages/Home.vue')
+            },
+            {
+                path: 'management',
+                component: () => import('@/pages/ManagementPage.vue')
+            },
+            {
+                path: '剩餘',
+                component: () => import('@/pages/MoneyLeft.vue')
+            },
+        ]
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        component: () => import('@/pages/NotFound.vue')
+    }
+]
+
+const router = createRouter({
+    history: createWebHistory(import.meta.env.BASE_URL),
+    routes
+})
+
+export default router
