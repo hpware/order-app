@@ -29,14 +29,9 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('@/pages/ManagementPage.vue')
             },
             {
-                path: '剩餘',
-                component: () => import('@/pages/MoneyLeft.vue')
-            },
-            {
                 path: '充值',
                 component: () => import('@/pages/RechargePage.vue')
             }
-
         ]
     },
     {

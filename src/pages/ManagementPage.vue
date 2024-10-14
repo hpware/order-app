@@ -1,51 +1,31 @@
 <script setup lang="ts">
-
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
+import cookie from 'vue-cookies';
+const admin_user = cookie.get('admin');
+if (!admin_user) {
+  setTimeout(() => {
+    window.location.href = '/app/login';
+  }, 0);
+}
 </script>
 
 <template>
-  <ion-tabs>
-    <ion-tab-bar slot="bottom">
-      <ion-tab-button tab="tab1">
-        <ion-icon name="triangle" />
-        <ion-label>Tab 1</ion-label>
-      </ion-tab-button>
-      <ion-tab-button tab="tab2">
-        <ion-icon name="ellipse" />
-        <ion-label>Tab 2</ion-label>
-      </ion-tab-button>
-      <ion-tab-button tab="tab3">
-        <ion-icon name="square" />
-        <ion-label>Tab 3</ion-label>
-      </ion-tab-button>
-    </ion-tab-bar>
-    <ion-tab tab="tab1">
-      <ion-content>
-        <ion-list>
-          <ion-item>
-            <ion-label>Tab 1</ion-label>
-          </ion-item>
-        </ion-list>
-      </ion-content>
-    </ion-tab>
-    <ion-tab tab="tab2">
-      <ion-content>
-        <ion-list>
-          <ion-item>
-            <ion-label>Tab 2</ion-label>
-          </ion-item>
-        </ion-list>
-      </ion-content>
-    </ion-tab>
-    <ion-tab tab="tab3">
-      <ion-content>
-        <ion-list>
-          <ion-item>
-            <ion-label>Tab 3</ion-label>
-          </ion-item>
-        </ion-list>
-      </ion-content>
-    </ion-tab>
-  </ion-tabs>
+  <ion-page>
+    <ion-header :translucent="true">
+      <ion-toolbar>
+        <ion-title>管理員</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content :fullscreen="true">
+      <ion-header collapse="condense">
+        <ion-toolbar>
+          <ion-title size="large">管理員系統</ion-title>
+        </ion-toolbar>
+      </ion-header>
+        <div>
+        </div>
+    </ion-content>
+  </ion-page>
 </template>
 
 <style scoped>
