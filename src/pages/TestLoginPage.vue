@@ -1,39 +1,67 @@
 <script setup lang="ts">
+// Import
 import cookie from 'vue-cookies';
 import { ref } from 'vue';
 import { IonIcon } from '@ionic/vue';
-import { logInOutline } from 'ionicons/icons';
+import { logInOutline, eyeOutline, eyeOffOutline } from 'ionicons/icons';
+import crypto from 'crypto-js';
+import SHA512 from 'crypto-js/sha512';
+
+// Set values
 const displayError = ref(false);
-import { supabase } from '@/components/supabase';
-async function login() {
+const displayErrorServer = ref(false);
+const username = ref('');
+const password = ref('');
+
+// Submit User Input Data Function
+async function loginsubmit() {
+  displayError.value = false;
+  displayErrorServer.value = false;
+  username.value = username.value.toLowerCase();
+  const passwordHash = SHA512(password.value).toString();
   try {
-    const { error } = await supabase.auth.signIn({
-      email: email.value,
-      password: password.value,
+    const fetchURL = await fetch('https://am.yuanhau.com/webhook-test/98b18c1e-9beb-4085-8579-c6219b99b98e-order-app-login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username,
+        password: passwordHash,
+      }),
     });
-    if (error) {
-      alert(error);
+    const data = await fetchURL.json();
+    if (data.user === "admin") {
+      cookie.set('admin', 'true');
+      alert('登入成功');
+      window.location.href = '/app/management';
+    } else if (data.user === "user") {
+      cookie.set('login', 'user');
+      alert('登入成功');
+      window.location.href = '/app/home';
+    } else {
+      displayError.value = true;
     }
-    alert('登入成功');
-    window.location.href = '/app/home';
   } catch (error) {
-    alert(error);
+    displayErrorServer.value = true;
   }
 }
+// Function 2
 </script>
 
 <template>
   <div class="login-container">
-    <form @submit.prevent="login">
+    <form @submit.prevent="loginsubmit">
       <ion-icon :icon="logInOutline" class="start"></ion-icon>
-      <h2>登入 Order App</h2>
-      <label for="username">Email</label><br/>
-      <input type="email" id="email" name="email" :is="email" required placeholder="example@gmail.com"/><br/>
+      <h2>登入 Order App (Test)</h2>
+      <label for="username">使用者</label><br/>
+      <input type="username" id="username" name="username" :is="username" required placeholder="example"/><br/>
       <label for="password">密碼</label><br/>
-      <input type="password" id="password" name="password" :is="password" required placeholder=""/>&nbsp;<button><i></i></button>
+      <input type="password" id="password" name="password" :is="password" required placeholder=""/><!--&nbsp;<button class="pwddisplay" @click="displaypwd"><ion-icon :icon="eyeOutline" v-if="hideeye"></ion-icon><ion-icon :icon="eyeOffOutline" v-if="!hideeye"></ion-icon></button>-->
       <br/><br/>
-      <input type="submit" value="登入" />
-      <p v-if="displayError" style="color: red;">帳號或密碼錯誤</p>
+      <button class="submit" type="submit">登入</button>
+      <p v-if="displayError" style="color: red;">帳號或密碼(或伺服器)錯誤</p>
+      <p v-if="displayErrorServer" style="color: red;">伺服器錯誤</p>
     </form>
   </div>
 </template>
@@ -47,6 +75,11 @@ div.login-container {
 }
 ion-icon.start {
   font-size: 50px;
-
+}
+button.pwddisplay {
+  background-color:transparent;
+  border:none;
+  cursor:pointer;
+  outline:none;
 }
 </style>

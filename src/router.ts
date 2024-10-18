@@ -9,6 +9,10 @@ const routes: Array<RouteRecordRaw> = [
         redirect: '/app/login'
     },
     {
+        path: '/test',
+        redirect: '/app/testlogin'
+    },
+    {
         path: '/app/',
         component: TabsPage,
         children: [
@@ -19,6 +23,10 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: 'login',
                 component: () => import('@/pages/LoginPage.vue')
+            },
+            {
+                path: 'testlogin',
+                component: () => import('@/pages/TestLoginPage.vue')
             },
             {
                 path: 'home',

@@ -38,7 +38,7 @@ function loginsubmit() {
           <label for="password">密碼</label><br/>
           <input type="password" id="password" name="password" :is="password" required placeholder=""/><!--&nbsp;<button class="pwddisplay" @click="displaypwd"><ion-icon :icon="eyeOutline" v-if="hideeye"></ion-icon><ion-icon :icon="eyeOffOutline" v-if="!hideeye"></ion-icon></button>-->
           <br/><br/>
-          <input type="submit" value="登入" />
+          <button class="submit" type="submit">登入</button>
           <p v-if="displayError" style="color: red;">帳號或密碼錯誤</p>
         </form>
       </div>
