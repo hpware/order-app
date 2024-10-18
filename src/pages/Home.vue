@@ -1,13 +1,32 @@
 <script setup lang="ts">
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import cookie from 'vue-cookies';
-const login_user = ref(cookie.get('login'));
-if (!cookie.get('login')) {
-  setTimeout(() => {
+const logincookie = cookie.get('user');
+const loggedin = ref(true);
+async function authcookie() {
+  const fetchURL = await fetch('https://am.yuanhau.com/webhook-test/b39eff47-1aa7-4baf-a073-9bcfcc6cc29f', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      cookie: logincookie,
+    }),
+  });
+  const data = await fetchURL.json();
+  console.log(data);
+  if (data.cookieMatch === "true") {
+    loggedin.value = true;
+  } else {
+    loggedin.value = false;
+    cookie.remove('user');
     window.location.href = '/app/login';
-  }, 0);
+  }
 }
+onMounted(() => {
+  authcookie();
+});
 const moneycount = ref(51);
 </script>
 

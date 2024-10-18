@@ -18,24 +18,25 @@ async function loginsubmit() {
   displayError.value = false;
   displayErrorServer.value = false;
   username.value = username.value.toLowerCase();
-  const passwordHash = SHA512(password.value).toString();
+  const passwordhash = SHA512(password.value).toString();
   try {
-    const fetchURL = await fetch('https://am.yuanhau.com/webhook-test/98b18c1e-9beb-4085-8579-c6219b99b98e-order-app-login', {
+    const fetchURL = await fetch('https://am.yuanhau.com/webhook-test/98b18c1-9beb-40sdrf85-8579-c6219b99b98e-order-app-login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username,
-        password: passwordHash,
+        username: username.value,
+        password: passwordhash,
       }),
     });
     const data = await fetchURL.json();
-    if (data.user === "admin") {
+    console.log(data);
+    if (data.isadmin === "true") {
       cookie.set('admin', 'true');
       alert('登入成功');
       window.location.href = '/app/management';
-    } else if (data.user === "user") {
+    } else if (data.isadmin === "false") {
       cookie.set('login', 'user');
       alert('登入成功');
       window.location.href = '/app/home';
@@ -55,9 +56,9 @@ async function loginsubmit() {
       <ion-icon :icon="logInOutline" class="start"></ion-icon>
       <h2>登入 Order App (Test)</h2>
       <label for="username">使用者</label><br/>
-      <input type="username" id="username" name="username" :is="username" required placeholder="example"/><br/>
+      <input type="username" id="username" name="username" v-model="username" required placeholder="example"/><br/>
       <label for="password">密碼</label><br/>
-      <input type="password" id="password" name="password" :is="password" required placeholder=""/><!--&nbsp;<button class="pwddisplay" @click="displaypwd"><ion-icon :icon="eyeOutline" v-if="hideeye"></ion-icon><ion-icon :icon="eyeOffOutline" v-if="!hideeye"></ion-icon></button>-->
+      <input type="password" id="password" name="password" v-model="password" required placeholder=""/><!--&nbsp;<button class="pwddisplay" @click="displaypwd"><ion-icon :icon="eyeOutline" v-if="hideeye"></ion-icon><ion-icon :icon="eyeOffOutline" v-if="!hideeye"></ion-icon></button>-->
       <br/><br/>
       <button class="submit" type="submit">登入</button>
       <p v-if="displayError" style="color: red;">帳號或密碼(或伺服器)錯誤</p>

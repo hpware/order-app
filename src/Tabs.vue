@@ -2,10 +2,10 @@
 import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage, IonRouterOutlet } from '@ionic/vue';
 import {ellipse, square, triangle, home, logOut, personCircle, person} from 'ionicons/icons';
 import cookie from 'vue-cookies';
-const login_user = cookie.get('login');
+const login_user = cookie.get('user');
 const admin_user = cookie.get('admin');
 function logout() {
-  if (cookie.get('login')) {
+  if (cookie.get('user')) {
     cookie.remove('login');
     alert('登出成功');
   }
