@@ -1,27 +1,56 @@
 <script setup lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-import { ref, onMounted } from 'vue';
-import cookie from 'vue-cookies';
-const logincookie = cookie.get('user');
-const loggedin = ref(true);
+import {
+  IonPage,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonIcon,
+} from "@ionic/vue";
+import { refreshOutline } from "ionicons/icons";
+import { ref, onMounted } from "vue";
+import cookie from "vue-cookies";
+const logincookie = cookie.get("user");
+const loggedin = ref(false);
+const lazyload = ref(true);
+const verifying = ref(true);
+const loggeduser = ref("");
 async function authcookie() {
-  const fetchURL = await fetch('https://am.yuanhau.com/webhook-test/b39eff47-1aa7-4baf-a073-9bcfcc6cc29f', {
-    method: 'POST',
+  const fetchURL = await fetch(
+    "https://am.yuanhau.com/webhook/b39eff47-1aa7-4baf-a073-9bcfcc6cc29f",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        cookie: logincookie,
+      }),
+    },
+  );
+  const data = await fetchURL.json();
+  if (data.cookieMatch === true) {
+    loggedin.value = true;
+    loggeduser.value = data.user;
+  } else {
+    loggedin.value = false;
+  }
+  verifying.value = false;
+}
+async function moneycountload() {
+  lazyload.value = false;
+  const fetchURL = await fetch("https://w", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       cookie: logincookie,
     }),
   });
   const data = await fetchURL.json();
-  console.log(data);
-  if (data.cookieMatch === "true") {
+  if (data.cookieMatch === true) {
     loggedin.value = true;
-  } else {
-    loggedin.value = false;
-    cookie.remove('user');
-    window.location.href = '/app/login';
   }
 }
 onMounted(() => {
@@ -43,17 +72,34 @@ const moneycount = ref(51);
           <ion-title size="large">首頁</ion-title>
         </ion-toolbar>
       </ion-header>
-      <div v-if="login_user">
-        <h2>剩餘餘額</h2>
-        <br/>
+      <div v-if="verifying">
+        <br />
+        <ion-spinner size="large"></ion-spinner>
+        <h3>正在驗證Cookie...</h3>
+      </div>
+      <div v-if="loggedin && !verifying">
+        <h2>
+          剩餘餘額&nbsp;<button
+            style="font-size: 0.8em; background-color: transparent"
+            @click="moneycountload()"
+            v-if="lazyload"
+          >
+            <ion-icon :icon="refreshOutline"></ion-icon>
+          </button>
+        </h2>
+        <br />
         <div class="box">
-        <span class="moneycountbox" v-if="moneycount > 100">{{ moneycount }}</span>
-          <span class="moneycountbox" style="color:red;" v-else>{{ moneycount }}</span>
+          <span class="moneycountbox" v-if="lazyload">----</span>
+          <span class="moneycountbox" v-else-if="moneycount > 100">{{
+            moneycount
+          }}</span>
+          <span class="moneycountbox" style="color: red" v-else>{{
+            moneycount
+          }}</span>
         </div>
-        <p v-if="moneycount <= 100">建議儲值</p>
+        <p v-if="!lazyload && moneycount <= 100">建議儲值</p>
       </div>
-      <div v-else>
-      </div>
+      <div v-else></div>
     </ion-content>
   </ion-page>
 </template>

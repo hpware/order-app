@@ -1,18 +1,18 @@
 <script setup lang="ts">
 // Import
-import cookie from 'vue-cookies';
-import { ref } from 'vue';
-import { IonIcon } from '@ionic/vue';
-import { logInOutline, eyeOutline, eyeOffOutline } from 'ionicons/icons';
-import crypto from 'crypto-js';
-import SHA512 from 'crypto-js/sha512';
+import cookie from "vue-cookies";
+import { ref } from "vue";
+import { IonIcon } from "@ionic/vue";
+import { logInOutline, eyeOutline, eyeOffOutline } from "ionicons/icons";
+import crypto from "crypto-js";
+import SHA512 from "crypto-js/sha512";
 
 // Set values
 const displayError = ref(false);
 const displayErrorServer = ref(false);
-const username = ref('');
-const password = ref('');
-const cookiedata = ref('');
+const username = ref("");
+const password = ref("");
+const cookiedata = ref("");
 
 // Submit User Input Data Function
 async function loginsubmit() {
@@ -21,27 +21,30 @@ async function loginsubmit() {
   username.value = username.value.toLowerCase();
   const passwordhash = SHA512(password.value).toString();
   try {
-    const fetchURL = await fetch('https://am.yuanhau.com/webhook/98b18c1e-9beb-4085-8579-c6219b99b98e-order-app-login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    const fetchURL = await fetch(
+      "https://am.yuanhau.com/webhook/98b18c1e-9beb-4085-8579-c6219b99b98e-order-app-login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username.value,
+          password: passwordhash,
+        }),
       },
-      body: JSON.stringify({
-        username: username.value,
-        password: passwordhash,
-      }),
-    });
+    );
     const data = await fetchURL.json();
     console.log(data);
     cookiedata.value = data.cookie;
     if (data.isadmin === "true") {
-      cookie.set('admin', 'true');
-      alert('登入成功');
-      window.location.href = '/app/management';
+      cookie.set("admin", "true");
+      alert("登入成功");
+      window.location.href = "/app/management";
     } else if (data.isadmin === "false") {
-      cookie.set('user', cookiedata.value, '1d');
-      alert('登入成功');
-      window.location.href = '/app/home';
+      cookie.set("user", cookiedata.value, "1d");
+      alert("登入成功");
+      window.location.href = "/app/home";
     } else {
       displayError.value = true;
     }
@@ -50,9 +53,9 @@ async function loginsubmit() {
   }
 }
 // Function 2
-if (cookie.get('user')) {
+if (cookie.get("user")) {
   setTimeout(() => {
-    window.location.href = '/app/home';
+    window.location.href = "/app/home";
   }, 0);
 }
 </script>
@@ -62,14 +65,28 @@ if (cookie.get('user')) {
     <form @submit.prevent="loginsubmit">
       <ion-icon :icon="logInOutline" class="start"></ion-icon>
       <h2>登入 Order App</h2>
-      <label for="username">使用者</label><br/>
-      <input type="username" id="username" name="username" v-model="username" required placeholder="example"/><br/>
-      <label for="password">密碼</label><br/>
-      <input type="password" id="password" name="password" v-model="password" required placeholder=""/><!--&nbsp;<button class="pwddisplay" @click="displaypwd"><ion-icon :icon="eyeOutline" v-if="hideeye"></ion-icon><ion-icon :icon="eyeOffOutline" v-if="!hideeye"></ion-icon></button>-->
-      <br/><br/>
+      <label for="username">使用者</label><br />
+      <input
+        type="username"
+        id="username"
+        name="username"
+        v-model="username"
+        required
+        placeholder="example"
+      /><br />
+      <label for="password">密碼</label><br />
+      <input
+        type="password"
+        id="password"
+        name="password"
+        v-model="password"
+        required
+        placeholder=""
+      /><!--&nbsp;<button class="pwddisplay" @click="displaypwd"><ion-icon :icon="eyeOutline" v-if="hideeye"></ion-icon><ion-icon :icon="eyeOffOutline" v-if="!hideeye"></ion-icon></button>-->
+      <br /><br />
       <button class="submit" type="submit">登入</button>
-      <p v-if="displayError" style="color: red;">帳號或密碼(或伺服器)錯誤</p>
-      <p v-if="displayErrorServer" style="color: red;">伺服器錯誤</p>
+      <p v-if="displayError" style="color: red">帳號或密碼(或伺服器)錯誤</p>
+      <p v-if="displayErrorServer" style="color: red">伺服器錯誤</p>
     </form>
   </div>
 </template>
@@ -85,9 +102,9 @@ ion-icon.start {
   font-size: 50px;
 }
 button.pwddisplay {
-  background-color:transparent;
-  border:none;
-  cursor:pointer;
-  outline:none;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
 }
 </style>
