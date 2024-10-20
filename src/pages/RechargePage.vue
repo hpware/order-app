@@ -1,6 +1,11 @@
 <script setup lang="ts">
-
-import {IonContent, IonHeader, IonPage, IonTitle, IonToolbar} from "@ionic/vue";
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/vue";
 </script>
 <template>
   <ion-page>
@@ -22,6 +27,4 @@ import {IonContent, IonHeader, IonPage, IonTitle, IonToolbar} from "@ionic/vue";
   </ion-page>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

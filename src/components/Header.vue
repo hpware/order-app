@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-import { defineProps } from 'vue';
+import { IonHeader, IonToolbar, IonTitle, IonContent } from "@ionic/vue";
+import { defineProps } from "vue";
 const props = defineProps({
   title: {
-    type:String,
-    required:true
-  }
-})
+    type: String,
+    required: true,
+  },
+});
 </script>
 
 <template>
@@ -17,6 +17,4 @@ const props = defineProps({
   </ion-header>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

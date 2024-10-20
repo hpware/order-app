@@ -1,20 +1,36 @@
 <script setup lang="ts">
-import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage, IonRouterOutlet } from '@ionic/vue';
-import {ellipse, square, triangle, home, logOut, personCircle, person} from 'ionicons/icons';
-import cookie from 'vue-cookies';
-const login_user = cookie.get('user');
-const admin_user = cookie.get('admin');
+import {
+  IonTabBar,
+  IonTabButton,
+  IonTabs,
+  IonLabel,
+  IonIcon,
+  IonPage,
+  IonRouterOutlet,
+} from "@ionic/vue";
+import {
+  ellipse,
+  square,
+  triangle,
+  home,
+  logOut,
+  personCircle,
+  person,
+} from "ionicons/icons";
+import cookie from "vue-cookies";
+const login_user = cookie.get("user");
+const admin_user = cookie.get("admin");
 function logout() {
-  if (cookie.get('user')) {
-    cookie.remove('login');
-    alert('登出成功');
+  if (cookie.get("user")) {
+    cookie.remove("login");
+    alert("登出成功");
   }
-  if (cookie.get('admin')) {
-    cookie.remove('admin');
-    alert('登出成功');
+  if (cookie.get("admin")) {
+    cookie.remove("admin");
+    alert("登出成功");
   }
-  window.location.href = '/app/login';
-};
+  window.location.href = "/app/login";
+}
 </script>
 
 <template>
