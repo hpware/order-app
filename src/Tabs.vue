@@ -22,7 +22,7 @@ const login_user = cookie.get("user");
 const admin_user = cookie.get("admin");
 function logout() {
   if (cookie.get("user")) {
-    cookie.remove("login");
+    cookie.remove("user");
     alert("登出成功");
   }
   if (cookie.get("admin")) {
