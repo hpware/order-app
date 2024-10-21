@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import {
-  IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonIcon,
-} from "@ionic/vue";
+// Import
+import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonIcon,} from "@ionic/vue";
 import { refreshOutline } from "ionicons/icons";
 import { ref, onMounted } from "vue";
 import cookie from "vue-cookies";
+
+// Set values
 const logincookie = cookie.get("user");
 const loggedin = ref(false);
 const lazyload = ref(true);
 const verifying = ref(true);
 const loggeduser = ref("");
+const pleaserelogin = ref(false);
+const moneycount = ref('');
+
+// Check Cookie
 async function authcookie() {
   const fetchURL = await fetch(
     "https://am.yuanhau.com/webhook/b39eff47-1aa7-4baf-a073-9bcfcc6cc29f",
@@ -34,29 +34,37 @@ async function authcookie() {
     loggeduser.value = data.user;
   } else {
     loggedin.value = false;
+    setTimeout(() => {
+      pleaserelogin.value = true;
+      cookie.remove("user");
+      window.location.href = "/app/login";
+    }, 1000);
   }
   verifying.value = false;
 }
+
+// Load Money Count
 async function moneycountload() {
   lazyload.value = false;
-  const fetchURL = await fetch("https://w", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const fetchURL = await fetch(
+    "https://am.yuanhau.com/webhook/e5df975b-7543-4c77-beae-83503aa4d1df-money-j2kjowefkoeprvoprekpgooewkprekgoegkvropdsfkvw-43iksg0opvdk23-w0gejksvdpoxj2ogj-0nje0-rjg-r0sdjc0qjj0wj9dpfjbw4t-q23iqweasoverhejrgojdpfjw430-gfjvwkeds0jgv9pw4jt092j34we0ogjvreopdsvjopjeioprjgx0j34w0-etjfrw0-esfpdxcjbipdfjt043wep9svpojgvp4j390egiordfpvj2pt4jw0ipvoj43tjgf9er0sdjg90jeg90tj",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user: loggeduser.value,
+      }),
     },
-    body: JSON.stringify({
-      cookie: logincookie,
-    }),
-  });
+  );
   const data = await fetchURL.json();
-  if (data.cookieMatch === true) {
-    loggedin.value = true;
-  }
+  moneycount.value = data.moneyleft;
 }
 onMounted(() => {
   authcookie();
 });
-const moneycount = ref(51);
+
 </script>
 
 <template>
@@ -72,6 +80,9 @@ const moneycount = ref(51);
           <ion-title size="large">首頁</ion-title>
         </ion-toolbar>
       </ion-header>
+      <div v-if="pleaserelogin">
+        <p>請登入</p>
+      </div>
       <div v-if="verifying">
         <br />
         <ion-spinner size="large"></ion-spinner>

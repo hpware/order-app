@@ -13,6 +13,7 @@ const displayErrorServer = ref(false);
 const username = ref("");
 const password = ref("");
 const cookiedata = ref("");
+const loading = ref(false);
 
 // Submit User Input Data Function
 async function loginsubmit() {
@@ -20,6 +21,7 @@ async function loginsubmit() {
   displayErrorServer.value = false;
   username.value = username.value.toLowerCase();
   const passwordhash = SHA512(password.value).toString();
+  loading.value = true;
   try {
     const fetchURL = await fetch(
       "https://am.yuanhau.com/webhook/98b18c1e-9beb-4085-8579-c6219b99b98e-order-app-login",
@@ -51,6 +53,7 @@ async function loginsubmit() {
   } catch (error) {
     displayErrorServer.value = true;
   }
+  loading.value = false;
 }
 // Function 2
 if (cookie.get("user")) {
@@ -62,7 +65,11 @@ if (cookie.get("user")) {
 
 <template>
   <div class="login-container">
-    <form @submit.prevent="loginsubmit">
+    <div v-if="loading">
+      <ion-spinner /><br />
+      <p>正在傳送資料到伺服器中...</p>
+    </div>
+    <form @submit.prevent="loginsubmit" v-else>
       <ion-icon :icon="logInOutline" class="start"></ion-icon>
       <h2>登入 Order App</h2>
       <label for="username">使用者</label><br />
@@ -85,7 +92,7 @@ if (cookie.get("user")) {
       /><!--&nbsp;<button class="pwddisplay" @click="displaypwd"><ion-icon :icon="eyeOutline" v-if="hideeye"></ion-icon><ion-icon :icon="eyeOffOutline" v-if="!hideeye"></ion-icon></button>-->
       <br /><br />
       <button class="submit" type="submit">登入</button>
-      <p v-if="displayError" style="color: red">帳號或密碼(或伺服器)錯誤</p>
+      <p v-if="displayError" style="color: red">帳號或密碼錯誤</p>
       <p v-if="displayErrorServer" style="color: red">伺服器錯誤</p>
     </form>
   </div>
