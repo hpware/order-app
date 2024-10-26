@@ -46,7 +46,8 @@ async function loginsubmit() {
     console.log(data);
     cookiedata.value = data.cookie;
     if (data.isadmin === "true") {
-      cookie.set("admin", "true");
+      cookie.set("user", cookiedata.value, "1d");
+      cookie.set("admin", cookiedata.value, "1d");
       alert("登入成功");
       window.location.href = "/app/management";
     } else if (data.isadmin === "false") {
@@ -97,7 +98,7 @@ if (cookie.get("user")) {
         placeholder=""
       /><!--&nbsp;<button class="pwddisplay" @click="displaypwd"><ion-icon :icon="eyeOutline" v-if="hideeye"></ion-icon><ion-icon :icon="eyeOffOutline" v-if="!hideeye"></ion-icon></button>-->
       <br /><br />
-      <ion-button class="submit" type="submit" size="small">登入</ion-button>
+      <button class="submit" type="submit">登入</button>
       <p v-if="displayError" style="color: red">帳號或密碼錯誤</p>
       <p v-if="displayErrorServer" style="color: red">伺服器錯誤</p>
     </form>

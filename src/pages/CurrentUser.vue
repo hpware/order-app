@@ -21,10 +21,14 @@ const pleaserelogin = ref(false);
 const oldpassword = ref("");
 const newpassword = ref("");
 const confirmpassword = ref("");
+const oldpasswordc = ref('');
+const newpasswordc = ref('');
+const confirmpasswordc = ref('');
 const displayError = ref(false);
-const displayErrorServer = ref(false);
 const loading = ref(false);
 const changepass = ref(false);
+const ErrorText = ref("");
+
 
 // Check Cookie
 async function authcookie() {
@@ -58,42 +62,66 @@ async function authcookie() {
 // Logout Func
 function logout() {
   cookie.remove("user");
+  cookie.remove("admin");
   window.location.href="/app/login";
 }
 
+// Change Password Toggle
+function changepasstoggle() {
+  changepass.value = !changepass.value;
+}
 
 // Basic Actions
 function basic() {
   displayError.value = false;
-  displayErrorServer.value = false;
   loading.value = true;
 }
 
 // Password Changing Function
 async function changepasswordsubmitaction() {
   basic();
-  oldpassword.value = sha512(oldpassword.value).toString();
-  newpassword.value = sha512(newpassword.value).toString();
-  confirmpassword.value = sha512(confirmpassword.value).toString();
-  if (newpassword.value === confirmpassword.value) {
-    try {
-      const fetchURI = await fetch(
-          "/api/jadao",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              user: cookie.get("user"),
-              old: oldpassword.value,
-              new: newpassword.value,
-            })
+  oldpasswordc.value = sha512(oldpassword.value).toString();
+  newpasswordc.value = sha512(newpassword.value).toString();
+  confirmpasswordc.value = sha512(confirmpassword.value).toString();
+    if (newpasswordc.value === confirmpasswordc.value) {
+      if (newpassword.value.length >= 8) {
+        try {
+          const fetchURI = await fetch(
+              "https://am.yuanhau.com/webhook/d3c76e8a-622f-4168-a310-d77ace006df9",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  user: loggeduser.value,
+                  old: oldpasswordc.value,
+                  new: newpasswordc.value,
+                })
+              }
+          )
+          if (fetchURI.status === 200) {
+            alert("密碼更改成功");
+            changepass.value = false;
+          } else if (fetchURI.status === 403) {
+            displayError.value = true;
+            ErrorText.value = "密碼錯誤";
           }
-      )
-      const data = await fetchURI.json();
+        } catch (error) {
+          displayError.value = true;
+          ErrorText.value = "伺服器錯誤";
+        }
+    } else {
+
+        displayError.value = true;
+        ErrorText.value = "密碼太短！";
+        loading.value = false;
     }
+  } else {
+      displayError.value = true;
+      ErrorText.value = "密碼不相同";
   }
+  loading.value = false;
 }
 </script>
 
@@ -122,8 +150,8 @@ async function changepasswordsubmitaction() {
           <span class="user">{{ loggeduser }}</span>
           <main>
             <!--First button-->
-            <ion-button @click="changepass !== changepass" expand="block"
-              ><ionIcon :icon="key"></ionIcon>&nbsp;改變密碼</ion-button
+            <button @click="changepasstoggle()" expand="block"
+              ><ionIcon :icon="key"></ionIcon>&nbsp;改變密碼</button
             >
             <br />
             <!--Main Change Password Action-->
@@ -133,16 +161,47 @@ async function changepasswordsubmitaction() {
                 <br />
                 <p>運行中...</p>
               </div>
-              <div v-if="changepass">
+              <div v-if="!loading && changepass">
                 <form @submit.prevent="changepasswordsubmitaction()">
                   <label for="oldpassword">舊密碼</label><br />
+                  <input
+                    type="password"
+                    id="oldpassword"
+                    name="oldpassword"
+                    v-model="oldpassword"
+                    required
+                    placeholder=""
+                  /><br />
+                  <label for="newpassword">新密碼</label><br />
+                  <input
+                    type="password"
+                    id="newpassword"
+                    name="newpassword"
+                    v-model="newpassword"
+                    required
+                    placeholder=""
+                    >
+                  <p class="newpwdtext">新密碼必須要8個字元或以上</p>
+
+                  <label for="confirmpassword">確認新密碼</label><br />
+                  <input
+                    type="password"
+                    id="confirmpassword"
+                    name="confirmpassword"
+                    v-model="confirmpassword"
+                    required
+                    placeholder=""
+                    >
+                  <br /><br/>
+                  <button class="submit" type="submit" size="small">確認</button>
+                  <p v-if="displayError" style="color: red">{{ ErrorText }}</p>
                 </form>
               </div>
             </div>
-            <br />
+            <br /><br/>
             <!--Last button-->
-            <ion-button @click="logout()" expand="block"
-              ><ionIcon :icon="logOut"></ionIcon>&nbsp;登出</ion-button
+            <button @click="logout()" expand="block"
+              ><ionIcon :icon="logOut"></ionIcon>&nbsp;登出</button
             >
           </main>
         </div>
@@ -163,8 +222,10 @@ div.userbox {
     font-size: 1.4em;
   }
 }
-ion-button {
-  color: white;
+p.newpwdtext {
+  font-size: 0.8em;
+  margin-top: 0;
+  margin-bottom:0.3em;
 }
 @media (prefers-color-scheme: light) {
   div.userbox {
