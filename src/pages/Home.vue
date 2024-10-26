@@ -1,6 +1,13 @@
 <script setup lang="ts">
 // Import
-import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonIcon,} from "@ionic/vue";
+import {
+  IonPage,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonIcon,
+} from "@ionic/vue";
 import { refreshOutline } from "ionicons/icons";
 import { ref, onMounted } from "vue";
 import cookie from "vue-cookies";
@@ -12,7 +19,7 @@ const lazyload = ref(true);
 const verifying = ref(true);
 const loggeduser = ref("");
 const pleaserelogin = ref(false);
-const moneycount = ref('');
+const moneycount = ref("");
 
 // Check Cookie
 async function authcookie() {
@@ -64,7 +71,6 @@ async function moneycountload() {
 onMounted(() => {
   authcookie();
 });
-
 </script>
 
 <template>
@@ -156,7 +162,7 @@ span.moneycountbox {
   }
   .bla {
     color: black;
-    background-color: transparent
+    background-color: transparent;
   }
 }
 </style>

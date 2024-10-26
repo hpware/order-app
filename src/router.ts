@@ -41,9 +41,9 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/pages/RechargePage.vue"),
       },
       {
-        path:"user",
+        path: "user",
         component: () => import("@/pages/CurrentUser.vue"),
-      }
+      },
     ],
   },
   {

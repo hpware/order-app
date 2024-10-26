@@ -1,9 +1,15 @@
-npm<script setup lang="ts">
+npm
+<script setup lang="ts">
 // Import
 import cookie from "vue-cookies";
 import { ref } from "vue";
 import { IonIcon } from "@ionic/vue";
-import { logInOutline, eyeOutline, eyeOffOutline, keypad } from "ionicons/icons";
+import {
+  logInOutline,
+  eyeOutline,
+  eyeOffOutline,
+  keypad,
+} from "ionicons/icons";
 import crypto from "crypto-js";
 import SHA512 from "crypto-js/sha512";
 
