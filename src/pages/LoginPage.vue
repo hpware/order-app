@@ -1,4 +1,4 @@
-<script setup lang="ts">
+npm<script setup lang="ts">
 // Import
 import cookie from "vue-cookies";
 import { ref } from "vue";
