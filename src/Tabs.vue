@@ -15,22 +15,11 @@ import {
   home,
   logOut,
   personCircle,
-  person,
+  personOutline,
 } from "ionicons/icons";
 import cookie from "vue-cookies";
 const login_user = cookie.get("user");
 const admin_user = cookie.get("admin");
-function logout() {
-  if (cookie.get("user")) {
-    cookie.remove("user");
-    alert("登出成功");
-  }
-  if (cookie.get("admin")) {
-    cookie.remove("admin");
-    alert("登出成功");
-  }
-  window.location.href = "/app/login";
-}
 </script>
 
 <template>
@@ -42,19 +31,19 @@ function logout() {
           <ion-icon aria-hidden="true" :icon="home" />
           <ion-label>首頁</ion-label>
         </ion-tab-button>
-        <ion-tab-button @click="logout">
-          <ion-icon aria-hidden="true" :icon="logOut" />
-          <ion-label>登出</ion-label>
+        <ion-tab-button tab="user" href="/app/user">
+          <ion-icon aria-hidden="true" :icon="personOutline" />
+          <ion-label>你的帳號</ion-label>
         </ion-tab-button>
       </ion-tab-bar>
       <ion-tab-bar slot="bottom" v-if="admin_user">
         <ion-tab-button tab="management" href="/app/management">
           <ion-icon aria-hidden="true" :icon="personCircle" />
-          <ion-label>管理員</ion-label>
+          <ion-label>首頁</ion-label>
         </ion-tab-button>
-        <ion-tab-button @click="logout">
-          <ion-icon aria-hidden="true" :icon="logOut" />
-          <ion-label>登出</ion-label>
+        <ion-tab-button tab="user" href="/app/user">
+          <ion-icon aria-hidden="true" :icon="personOutline" style="color:red;"/>
+          <ion-label>你的帳號</ion-label>
         </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>

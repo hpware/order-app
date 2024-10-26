@@ -40,6 +40,10 @@ const routes: Array<RouteRecordRaw> = [
         path: "充值",
         component: () => import("@/pages/RechargePage.vue"),
       },
+      {
+        path:"user",
+        component: () => import("@/pages/CurrentUser.vue"),
+      }
     ],
   },
   {
