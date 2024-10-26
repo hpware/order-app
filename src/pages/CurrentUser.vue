@@ -2,9 +2,11 @@
 // Import
 import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonIcon,} from "@ionic/vue";
 import {personCircle, refreshOutline, logOut, key} from "ionicons/icons";
-import ChangePwdApp from "@/components/ChangePasswordApp.vue";
 import { ref, onMounted } from "vue";
 import cookie from "vue-cookies";
+import sha512 from "crypto-js/sha512";
+import cryptojs from "crypto-js";
+
 // On Start
 onMounted(() => {
   authcookie();
@@ -16,6 +18,13 @@ const loggedin = ref(false);
 const verifying = ref(true);
 const loggeduser = ref("");
 const pleaserelogin = ref(false);
+const oldpassword = ref("");
+const newpassword = ref("");
+const confirmpassword = ref("");
+const displayError = ref(false);
+const displayErrorServer = ref(false);
+const loading = ref(false);
+const changepass = ref(false);
 
 // Check Cookie
 async function authcookie() {
@@ -53,6 +62,39 @@ function logout() {
 }
 
 
+// Basic Actions
+function basic() {
+  displayError.value = false;
+  displayErrorServer.value = false;
+  loading.value = true;
+}
+
+// Password Changing Function
+async function changepasswordsubmitaction() {
+  basic();
+  oldpassword.value = sha512(oldpassword.value).toString();
+  newpassword.value = sha512(newpassword.value).toString();
+  confirmpassword.value = sha512(confirmpassword.value).toString();
+  if (newpassword.value === confirmpassword.value) {
+    try {
+      const fetchURI = await fetch(
+          "/api/jadao",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              user: cookie.get("user"),
+              old: oldpassword.value,
+              new: newpassword.value,
+            })
+          }
+      )
+      const data = await fetchURI.json();
+    }
+  }
+}
 </script>
 
 <template>
@@ -74,18 +116,36 @@ function logout() {
         <h3>正在取得使用者資料...</h3>
       </div>
       <div v-if="loggeduser">
-      <div class="userbox">
-      <span class="icon"><ionIcon :icon="personCircle"></ionIcon></span>
-        <br/>
-        <span class="user">{{loggeduser}}</span>
-        <main>
-          <!-- First button -->
-          <ChangePwdApp></ChangePwdApp>
-          <br/>
-          <!-- Last button -->
-          <ion-button @click="logout()" expand="block"><ionIcon :icon="logOut"></ionIcon>&nbsp;登出</ion-button>
-        </main>
-      </div>
+        <div class="userbox">
+          <span class="icon"><ionIcon :icon="personCircle"></ionIcon></span>
+          <br />
+          <span class="user">{{ loggeduser }}</span>
+          <main>
+            <!--First button-->
+            <ion-button @click="changepass !== changepass" expand="block"
+              ><ionIcon :icon="key"></ionIcon>&nbsp;改變密碼</ion-button
+            >
+            <br />
+            <!--Main Change Password Action-->
+            <div class="changepwd">
+              <div v-if="loading">
+                <ion-spinner />
+                <br />
+                <p>運行中...</p>
+              </div>
+              <div v-if="changepass">
+                <form @submit.prevent="changepasswordsubmitaction()">
+                  <label for="oldpassword">舊密碼</label><br />
+                </form>
+              </div>
+            </div>
+            <br />
+            <!--Last button-->
+            <ion-button @click="logout()" expand="block"
+              ><ionIcon :icon="logOut"></ionIcon>&nbsp;登出</ion-button
+            >
+          </main>
+        </div>
       </div>
     </ion-content>
   </ion-page>
@@ -94,31 +154,29 @@ function logout() {
 <style scoped>
 div.userbox {
   span.icon {
-    font-size:5em;
+    font-size: 5em;
     color: #74c2ff;
-    margin-bottom:0;
+    margin-bottom: 0;
   }
   span.user {
-    margin-top:0;
-    font-size:1.4em;
+    margin-top: 0;
+    font-size: 1.4em;
   }
 }
 ion-button {
-  color:white;
+  color: white;
 }
 @media (prefers-color-scheme: light) {
   div.userbox {
     span.icon {
-      font-size:5em;
+      font-size: 5em;
       color: #035ea6;
-      margin-bottom:0;
+      margin-bottom: 0;
     }
     span.user {
-      margin-top:0;
-      font-size:1.4em;
+      margin-top: 0;
+      font-size: 1.4em;
     }
   }
-
 }
-
 </style>
