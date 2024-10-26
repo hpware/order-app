@@ -3,7 +3,7 @@ npm<script setup lang="ts">
 import cookie from "vue-cookies";
 import { ref } from "vue";
 import { IonIcon } from "@ionic/vue";
-import { logInOutline, eyeOutline, eyeOffOutline } from "ionicons/icons";
+import { logInOutline, eyeOutline, eyeOffOutline, keypad } from "ionicons/icons";
 import crypto from "crypto-js";
 import SHA512 from "crypto-js/sha512";
 
@@ -70,7 +70,7 @@ if (cookie.get("user")) {
       <p>正在傳送資料到伺服器中...</p>
     </div>
     <form @submit.prevent="loginsubmit" v-else>
-      <ion-icon :icon="logInOutline" class="start"></ion-icon>
+      <ion-icon :icon="keypad" class="start"></ion-icon>
       <h2>登入 Order App</h2>
       <label for="username">使用者</label><br />
       <input
@@ -91,7 +91,7 @@ if (cookie.get("user")) {
         placeholder=""
       /><!--&nbsp;<button class="pwddisplay" @click="displaypwd"><ion-icon :icon="eyeOutline" v-if="hideeye"></ion-icon><ion-icon :icon="eyeOffOutline" v-if="!hideeye"></ion-icon></button>-->
       <br /><br />
-      <button class="submit" type="submit">登入</button>
+      <ion-button class="submit" type="submit" size="small">登入</ion-button>
       <p v-if="displayError" style="color: red">帳號或密碼錯誤</p>
       <p v-if="displayErrorServer" style="color: red">伺服器錯誤</p>
     </form>
