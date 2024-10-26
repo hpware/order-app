@@ -86,7 +86,7 @@ onMounted(() => {
       <div v-if="verifying">
         <br />
         <ion-spinner size="large"></ion-spinner>
-        <h3>正在驗證Cookie...</h3>
+        <h3>正在取得使用者資料並驗證Cookie...</h3>
       </div>
       <div v-if="loggedin && !verifying">
         <h2>
@@ -94,6 +94,7 @@ onMounted(() => {
             style="font-size: 0.8em; background-color: transparent"
             @click="moneycountload()"
             v-if="lazyload"
+            class="bla"
           >
             <ion-icon :icon="refreshOutline"></ion-icon>
           </button>
@@ -136,5 +137,26 @@ span.moneycountbox {
   border-radius: 10px;
   background-color: rgba(72, 115, 44, 0.38);
   box-shadow: 5px 5px 5px #72ba3f;
+}
+@media (prefers-color-scheme: light) {
+  span.moneycountbox {
+    font-size: 50px;
+    color: #000000;
+    font-weight: bold;
+    text-align: center;
+    align-items: center;
+    display: block;
+    margin: 0;
+    width: 200px;
+    padding: 10px;
+    border: 1px solid #79e32f;
+    border-radius: 10px;
+    background-color: rgba(124, 193, 80, 0.38);
+    box-shadow: 5px 5px 5px rgba(73, 147, 14, 0.68);
+  }
+  .bla {
+    color: black;
+    background-color: transparent
+  }
 }
 </style>
