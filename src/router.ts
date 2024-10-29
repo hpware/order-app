@@ -25,25 +25,17 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/pages/LoginPage.vue"),
       },
       {
-        path: "testlogin",
-        component: () => import("@/pages/TestLoginPage.vue"),
-      },
-      {
         path: "home",
         component: () => import("@/pages/Home.vue"),
-      },
-      {
-        path: "management",
-        component: () => import("@/pages/ManagementPage.vue"),
-      },
-      {
-        path: "充值",
-        component: () => import("@/pages/RechargePage.vue"),
       },
       {
         path: "user",
         component: () => import("@/pages/CurrentUser.vue"),
       },
+      {
+        path: "404",
+        component: () => import("@/pages/NotFound.vue")
+      }
     ],
   },
   {

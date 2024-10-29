@@ -36,20 +36,6 @@ const admin_user = cookie.get("admin");
           <ion-label>你的帳號</ion-label>
         </ion-tab-button>
       </ion-tab-bar>
-      <ion-tab-bar slot="bottom" v-if="admin_user">
-        <ion-tab-button tab="management" href="/app/management">
-          <ion-icon aria-hidden="true" :icon="personCircle" />
-          <ion-label>首頁</ion-label>
-        </ion-tab-button>
-        <ion-tab-button tab="user" href="/app/user">
-          <ion-icon
-            aria-hidden="true"
-            :icon="personOutline"
-            style="color: red"
-          />
-          <ion-label>你的帳號</ion-label>
-        </ion-tab-button>
-      </ion-tab-bar>
     </ion-tabs>
   </ion-page>
 </template>

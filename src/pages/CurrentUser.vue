@@ -52,8 +52,7 @@ async function authcookie() {
     loggedin.value = false;
     setTimeout(() => {
       pleaserelogin.value = true;
-      cookie.remove("user");
-      window.location.href = "/app/login";
+      logout();
     }, 1000);
   }
   verifying.value = false;
