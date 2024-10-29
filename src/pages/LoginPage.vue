@@ -45,12 +45,7 @@ async function loginsubmit() {
     const data = await fetchURL.json();
     console.log(data);
     cookiedata.value = data.cookie;
-    if (data.isadmin === "true") {
-      cookie.set("user", cookiedata.value, "1d");
-      cookie.set("admin", cookiedata.value, "1d");
-      alert("登入成功");
-      window.location.href = "/app/management";
-    } else if (data.isadmin === "false") {
+    if (data.isadmin === "true" || data.isadmin === "false") {
       cookie.set("user", cookiedata.value, "1d");
       alert("登入成功");
       window.location.href = "/app/home";
